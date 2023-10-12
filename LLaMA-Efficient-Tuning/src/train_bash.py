@@ -1,4 +1,12 @@
 from llmtuner import run_exp
+import sys
+import os
+
+#EDITED
+if os.getcwd().split("/")[-1] != "LLaMa-Efficient-Tuning":
+    print(f"prefore cwd = {os.getcwd()}")
+    os.chdir(os.path.join(os.getcwd(), "LLaMA-Efficient-Tuning"))
+    print(f"after cwd = {os.getcwd()}")
 
 
 def main():
