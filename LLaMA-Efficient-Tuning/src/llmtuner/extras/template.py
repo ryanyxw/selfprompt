@@ -33,6 +33,8 @@ class Template:
         r"""
         Returns a single pair of token ids representing prompt and response respectively.
         """
+
+        #._format encorporates the (query, resp) pair into the last entry of history
         system, history = self._format(query, resp, history, system)
         encoded_pairs = self._encode(tokenizer, system, history)
         prompt_ids = []
@@ -286,6 +288,200 @@ register_template(
     ),
     sep=[]
 )
+
+
+#"First explain your reasonoing, then give your answer as the last word.
+
+register_template(
+    name="llama2_snli",
+    prefix=[
+        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. Limit your response to one word.  \n\n",
+    ],
+    prompt=[
+        "{{query}}\n\n### Response:\n"
+    ],
+    system="",
+    sep=[
+        "\n"
+    ],
+    use_history=False
+)
+
+##############Baselines
+
+
+register_template(
+    name="exp0",
+    prefix=[
+        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. First provide your answer in one word, then explain how you arrived at your answer.  \n\n",
+    ],
+    prompt=[
+        "{{query}}\n\n### Response:\n"
+    ],
+    system="",
+    sep=[
+        "\n"
+    ],
+    use_history=False
+)
+
+demon_entail_exp1 = "premise: \nThe old lady was captured.\nhypothesis: \nThe old lady murdered her husband.\n\n\n###Response: \nEntailment. This relationship is an entailment because the old lady's murder explains why she's captured."
+demon_contr_exp1 = "premise: \nThe old lady was captured.\nhypothesis: \nThe old lady hanged out with her friends.\n\n\n###Response: \nContradiction. This is a contradiction because the old lady could not get captured and hang out at the same time."
+demon_neutr_exp1 = "premise: \nThe old lady was captured.\nhypothesis: \nThe old lady was smiling at the press.\n\n\n###Response: \nNeutral. This is neutral because being captured and smiling is not contradictory, and smiling does not entails being captured."
+
+
+register_template(
+    name="exp1",
+    prefix=[
+        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. First provide your answer in one word, then explain how you arrived at your answer.  \n\n" + demon_entail_exp1 + "\n\n" + demon_contr_exp1 + "\n\n" +  demon_neutr_exp1 + "\n\n",
+    ],
+    prompt=[
+        "{{query}}\n\n### Response:\n"
+    ],
+    system="",
+    sep=[
+        "\n"
+    ],
+    use_history=False
+)
+
+
+################Baseline ends
+
+demon_entail_exp1 = "premise: \nThe old lady was captured.\nhypothesis: \nThe old lady murdered her husband.\n\n\n###Response: \nEntailment. This relationship is an entailment because the old lady's murder explains why she's captured."
+demon_contr_exp1 = "premise: \nThe old lady was captured.\nhypothesis: \nThe old lady hanged out with her friends.\n\n\n###Response: \nContradiction. This is a contradiction because the old lady could not get captured and hang out at the same time."
+demon_neutr_exp1 = "premise: \nThe old lady was captured.\nhypothesis: \nThe old lady was smiling at the press.\n\n\n###Response: \nNeutral. This is neutral because being captured and smiling is not contradictory, and smiling does not entails being captured."
+
+
+register_template(
+    name="exp1",
+    prefix=[
+        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. First provide your answer in one word, then explain how you arrived at your answer.  \n\n" + demon_entail_exp1 + "\n\n" + demon_contr_exp1 + "\n\n" +  demon_neutr_exp1 + "\n\n",
+    ],
+    prompt=[
+        "{{query}}\n\n### Response:\n"
+    ],
+    system="",
+    sep=[
+        "\n"
+    ],
+    use_history=False
+)
+
+
+######################
+
+demon_entail_exp2 = "premise: \nThe furry brown dog is swimming in the ocean.\nhypothesis: \nA dog is swimming.\n\n\n###Response: \nEntailment. The premise entails the hypothesis because if the furry brown dog is swimming in the ocean, then a dog must be swimming."
+demon_contr_exp2 = "premise: \nThe furry brown dog is swimming in the ocean.\nhypothesis: \nA dog is running around the yard.\n\n\n###Response: \nContradiction. The premise contradicts with the hypothesis because the activity \"swimming in the ocean\" and \"being around the yard\" are contradictory in nature and cannot take place at the same time."
+demon_neutr_exp2 = "premise: \nThe furry brown dog is swimming in the ocean.\nhypothesis: \nA dog is chasing a fish.\n\n\n###Response: \nNeutral. The premise is neutral to the hypothesis because \"swimming in the ocean\" in the premise neither entails nor contradict with \"chasing a fish\" in the hypothesis."
+
+
+register_template(
+    name="exp2",
+    prefix=[
+        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. First provide your answer in one word, then explain how you arrived at your answer.  \n\n" + demon_entail_exp2 + "\n\n" + demon_contr_exp2 + "\n\n" +  demon_neutr_exp2 + "\n\n",
+    ],
+    prompt=[
+        "{{query}}\n\n### Response:\n"
+    ],
+    system="",
+    sep=[
+        "\n"
+    ],
+    use_history=False
+)
+
+######################
+
+demon_entail_exp3 = "premise: \nThe furry brown dog is swimming in the ocean.\nhypothesis: \nA dog is swimming.\n\n\n###Response: \nEntailment. The premise entails the hypothesis. The premise provides specific details and describes a specific situation where a furry brown dog is swimming in the ocean. The hypothesis, on the other hand, is more general and states that a dog is swimming without mentioning any specific details such as its color or location. Since the first sentence provides more information and is a specific case of a dog swimming, it can be concluded that if the first sentence is true, then the second sentence must also be true. Therefore, the first sentence entails the second sentence."
+demon_contr_exp3 = "premise: \nThe furry brown dog is swimming in the ocean.\nhypothesis: \nA dog is running around the yard.\n\n\n###Response: \nContradiction. The premise contradicts the hypothesis. The premise states that a furry brown dog is swimming in the ocean, implying that the dog is engaged in an activity related to being in water. On the other hand, the hypothesis claims that a dog is running around the yard, implying that the dog is engaged in an activity related to being on land and moving quickly. These activities, swimming and running, are different and contradictory in nature. Therefore, based on the information provided, the premise and hypothesis conflict with each other and cannot both be true simultaneously."
+demon_neutr_exp3 = "premise: \nThe furry brown dog is swimming in the ocean.\nhypothesis: \nA dog is chasing a fish.\n\n\n###Response: \nNeutral. The premise is neutral to the hypothesis. The premise does not entail the hypothesis because the dog is not necessarily \"chasing a fish\" given that it is \"swimming in the ocean\". It might be doing some other things like escaping from a shark. The premise does not contradict with the hypothesis because \"chasing a fish\" is something the dog might do if it were \"swimming in the ocean\". Thus, the premise neither entails nor contradicts the hypothesis, so the premise is neutral to the hypothesis."
+
+
+register_template(
+    name="exp3",
+    prefix=[
+        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. First provide your answer in one word, then explain how you arrived at your answer.  \n\n" + demon_entail_exp3 + "\n\n" + demon_contr_exp3 + "\n\n" +  demon_neutr_exp3 + "\n\n",
+    ],
+    prompt=[
+        "{{query}}\n\n### Response:\n"
+    ],
+    system="",
+    sep=[
+        "\n"
+    ],
+    use_history=False
+)
+
+######################
+
+demon_entail_exp4 = "premise: \nThe furry brown dog is swimming in the ocean.\nhypothesis: \nA dog is swimming.\n\n\n###Response: \nEntailment. The premise entails the hypothesis because if the furry brown dog is swimming in the ocean, then a dog must be swimming."
+demon_contr_exp4 = "premise: \nA man and a woman are walking on a street at the top of a hill.\nhypothesis: \nTwo men play catch on a hill.\n\n\n###Response: \nContradiction. The premise contradicts the hypothesis because the premise states that there is \"a man and a woman\", which contradicts with the hypothesis which suggests that there are \"two men\"."
+demon_neutr_exp4 = "premise: \nChildren going home from school.\nhypothesis: \nThe children are walking in the afternoon.\n\n\n###Response: \nNeutral. The premise is neutral to the hypothesis because children \"going home from school\" in the premise neither entails nor contradicts with children \"walking in the afternoon\" in the hypothesis."
+
+
+register_template(
+    name="exp4",
+    prefix=[
+        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. First provide your answer in one word, then explain how you arrived at your answer.  \n\n" + demon_entail_exp4 + "\n\n" + demon_contr_exp4 + "\n\n" +  demon_neutr_exp4 + "\n\n",
+    ],
+    prompt=[
+        "{{query}}\n\n### Response:\n"
+    ],
+    system="",
+    sep=[
+        "\n"
+    ],
+    use_history=False
+)
+
+######################
+
+demon_entail_exp5 = "premise: \nThe furry brown dog is swimming in the ocean.\nhypothesis: \nA dog is swimming.\n\n\n###Response: \nEntailment. The premise entails the hypothesis. The premise provides specific details and describes a specific situation where a furry brown dog is swimming in the ocean. The hypothesis, on the other hand, is more general and states that a dog is swimming without mentioning any specific details such as its color or location. Since the first sentence provides more information and is a specific case of a dog swimming, it can be concluded that if the first sentence is true, then the second sentence must also be true. Therefore, the first sentence entails the second sentence."
+demon_contr_exp5 = "premise: \nA man and a woman are walking on a street at the top of a hill.\nhypothesis: \nTwo men play catch on a hill.\n\n\n###Response: \nContradiction. The premise contradicts with the hypothesis. The premise contradicts the hypothesis because it states that a man and a woman are walking on a street at the top of a hill. This implies that there are only two individuals, one man, and one woman, involved in the described activity and that they are walking on a street. On the other hand, the hypothesis claims that two men are playing catch on a hill, implying that there are two men engaged in an activity of playing catch, specifically on a hill. Here, the number of individuals involved (two men) and the activity being performed (playing catch) differ from those described in the premise. Therefore, based on the information provided, the premise and the hypothesis conflict with each other as they present different scenarios involving different numbers of people and distinct activities taking place in different locations. Thus, the premise contradicts the hypothesis."
+demon_neutr_exp5 = "premise: \nChildren going home from school.\nhypothesis: \nThe children are walking in the afternoon.\n\n\n###Response: \nNeutral. The premise is neutral to the hypothesis. The premise does not entail the hypothesis because the children are not necessarily \"walking in the afternoon\" given that they are \"going home from school.\" It might be that the children are still studying in classrooms in the afternoon. The premise does not contradict with the hypothesis because \"walking in the afternoon\" is something the children might do when they are \"going home\" from school on that day. Thus, the premise neither entails nor contradicts with the hypothesis, so the premise is neutral to the hypothesis."
+
+
+register_template(
+    name="exp5",
+    prefix=[
+        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. First provide your answer in one word, then explain how you arrived at your answer.  \n\n" + demon_entail_exp5 + "\n\n" + demon_contr_exp5 + "\n\n" +  demon_neutr_exp5 + "\n\n",
+    ],
+    prompt=[
+        "{{query}}\n\n### Response:\n"
+    ],
+    system="",
+    sep=[
+        "\n"
+    ],
+    use_history=False
+)
+
+######################
+
+
+
+
+
+
+
+
+
+
+# register_template(
+#     name="llama2_snli_1shot",
+#     prefix=[
+#         "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. Limit your response to one word.  \n\n",
+#     ],
+#     prompt=[
+#         demon_entail + "\n\n" + demon_contr + "\n\n" +  demon_neutr + "\n\n" + "{{query}}\n\n### Response:\n"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
 
 
 r"""
