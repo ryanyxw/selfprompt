@@ -1,27 +1,33 @@
 LLAMA_ET=LLaMA-Efficient-Tuning
 
-#CUDA_VISIBLE_DEVICES=0 python ${LLAMA_ET}/src/train_bash.py \
-#    --stage sft \
-#    --model_name_or_path NousResearch/Llama-2-7b-hf \
-#    --do_predict \
-#    --dataset alpaca_gpt4_en \
-#    --template default \
-#    --finetuning_type lora \
-#    --output_dir path_to_predict_result \
-#    --per_device_eval_batch_size 1 \
-#    --max_samples 100 \
-#    --predict_with_generate
+#################
+
+exp_file_name="exp_template"
+#Note: Please make sure to update src/llmtuner/extras/template.py with corresponding template name
+
+dataset_name="gsm8k"
+#Note: Please make sure to update data/dataset_info with corresponding dataset
+
+out_name="exp_template_out"
+num_examples=100
+gpu_devices=0
+
+#################
+
+#create the output directory. Exit if it already exists
+out="out/$out_name"
+mkdir -p $out
 
 
-CUDA_VISIBLE_DEVICES=0 python ${LLAMA_ET}/src/train_bash.py \
+CUDA_VISIBLE_DEVICES="$gpu_devices" python ${LLAMA_ET}/src/train_bash.py \
     --stage sft \
     --model_name_or_path NousResearch/Nous-Hermes-llama-2-7b \
     --do_predict \
-    --dataset snli \
-    --template exp0 \
+    --dataset $dataset_name \
+    --template $exp_file_name \
     --finetuning_type lora \
-    --output_dir exp0_v2 \
+    --output_dir $out \
     --per_device_eval_batch_size 1 \
-    --max_samples 640 \
+    --max_samples $num_examples \
     --fp16\
     --predict_with_generate

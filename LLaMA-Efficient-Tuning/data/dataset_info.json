@@ -8,6 +8,15 @@
       "history": ""
     }
   },
+  "gsm8k": {
+    "script_url": "gsm8k",
+    "columns": {
+      "prompt": "instruction",
+      "query": "",
+      "response": "output",
+      "history": ""
+    }
+  },
   "alpaca_en": {
     "file_name": "alpaca_data_en_52k.json",
     "file_sha1": "607f94a7f581341e59685aef32f531095232cf23"

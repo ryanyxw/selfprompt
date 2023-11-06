@@ -459,29 +459,35 @@ register_template(
 
 ######################
 
+exp_template_instruction="Solve the following math problem in a step by step manner, concluding with the final answer."
+
+exp_template_demonstrations = \
+"""### Input: 
+Ivan has a bird feeder in his yard that holds two cups of birdseed. Every week, he has to refill the emptied feeder. Each cup of birdseed can feed fourteen birds, but Ivan is constantly chasing away a hungry squirrel that steals half a cup of birdseed from the feeder every week. How many birds does Ivan’s bird feeder feed weekly?
+
+###Response: 
+Let's think step by step
+The squirrel steals 1/2 cup of birdseed every week, so the birds eat 2 - 1/2 = 1 1/2 cups of birdseed.
+Each cup feeds 14 birds, so Ivan’s bird feeder feeds 14 * 1 1/2 = 21 birds weekly.
+The answer is 21"""
+
+register_template(
+    name="exp_template",
+    prefix=[
+        f"### Instruction:\n{exp_template_instruction}\n\n" + exp_template_demonstrations + "\n\n",
+    ],
+    prompt=[
+        "### Input: \n{{query}}\n\n### Response: \n"
+    ],
+    system="",
+    sep=[
+        "\n"
+    ],
+    use_history=False
+)
 
 
 
-
-
-
-
-
-
-# register_template(
-#     name="llama2_snli_1shot",
-#     prefix=[
-#         "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. Limit your response to one word.  \n\n",
-#     ],
-#     prompt=[
-#         demon_entail + "\n\n" + demon_contr + "\n\n" +  demon_neutr + "\n\n" + "{{query}}\n\n### Response:\n"
-#     ],
-#     system="",
-#     sep=[
-#         "\n"
-#     ],
-#     use_history=False
-# )
 
 
 r"""
