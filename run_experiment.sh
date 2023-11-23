@@ -2,14 +2,14 @@ LLAMA_ET=LLaMA-Efficient-Tuning
 
 #################
 
-exp_file_name="exp_template"
+exp_file_name="llama2_snli"
 #Note: Please make sure to update src/llmtuner/extras/template.py with corresponding template name
 
-dataset_name="gsm8k"
+dataset_name="snli"
 #Note: Please make sure to update data/dataset_info with corresponding dataset
 
-out_name="exp_template_out"
-num_examples=100
+out_name="test_snli_download"
+num_examples=2
 gpu_devices=0
 
 #################
