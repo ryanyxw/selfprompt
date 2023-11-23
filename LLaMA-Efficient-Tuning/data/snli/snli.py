@@ -94,6 +94,6 @@ class Snli(datasets.GeneratorBasedBuilder):
                 if (row["gold_label"] == "-"):
                     continue
                 yield idx, {
-                    "instruction": row["sentence1"] + " AND " + row["sentence1"],
+                    "instruction": f"premise: \n{row['sentence1']}.\nhypothesis: \n{row['sentence2']}\n",
                     "output": row["gold_label"],
                 }
