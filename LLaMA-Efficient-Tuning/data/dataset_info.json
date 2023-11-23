@@ -1,10 +1,10 @@
 {
   "snli": {
-    "file_name": "snli/snli_llama.json",
+    "script_url": "snli",
     "columns": {
-      "prompt": "instruction",
+      "prompt": "premise",
       "query": "",
-      "response": "output",
+      "response": "label",
       "history": ""
     }
   },
