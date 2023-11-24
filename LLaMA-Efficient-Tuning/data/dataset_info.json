@@ -2,9 +2,9 @@
   "snli": {
     "script_url": "snli",
     "columns": {
-      "prompt": "premise",
+      "prompt": "instruction",
       "query": "",
-      "response": "label",
+      "response": "output",
       "history": ""
     }
   },

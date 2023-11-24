@@ -64,7 +64,8 @@ def get_dataset(
         if max_samples is not None:
             max_samples_temp = min(len(dataset), max_samples)
             dataset = dataset.select(range(max_samples_temp))
-
+        # import pdb
+        # pdb.set_trace()
         for column_name in ["prompt", "query", "response", "history"]: # align datasets
             if getattr(dataset_attr, column_name) and getattr(dataset_attr, column_name) != column_name:
                 dataset = dataset.rename_column(getattr(dataset_attr, column_name), column_name)

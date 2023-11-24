@@ -201,6 +201,7 @@ def preprocess_dataset(
         preprocess_func = preprocess_pretrain_dataset
         print_function = print_unsupervised_dataset_example
     elif stage == "sft" and not training_args.predict_with_generate:
+        #Note: NOT THIS. See the else statement
         dataset = dataset.filter(lambda example: example["prompt"] and example["response"])
         preprocess_func = preprocess_packed_supervised_dataset if data_args.sft_packing else preprocess_supervised_dataset
         print_function = print_supervised_dataset_example
@@ -209,6 +210,7 @@ def preprocess_dataset(
         preprocess_func = preprocess_pairwise_dataset
         print_function = print_pairwise_dataset_example
     else:
+        # only use examples that have an instruction / prompt
         dataset = dataset.filter(lambda example: example["prompt"])
         preprocess_func = preprocess_unsupervised_dataset
         print_function = print_unsupervised_dataset_example

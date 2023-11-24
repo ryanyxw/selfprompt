@@ -1,33 +1,30 @@
+#This exits the script if any command fails
+set -e
+
 LLAMA_ET=LLaMA-Efficient-Tuning
 
 #################
 
-exp_file_name="llama2_snli"
-#Note: Please make sure to update src/llmtuner/extras/template.py with corresponding template name
+exp_file_name="random_rationale_and_label" #Note: Please make sure to update src/llmtuner/extras/template.py with corresponding template name
+out_name="random_rationale_and_label" #Note: this is the output of sbatch and results
 
 dataset_name="snli"
 #Note: Please make sure to update data/dataset_info with corresponding dataset
 
-out_name="test_snli_download"
-num_examples=2
+num_examples=5
 gpu_devices=0
 
-#################
+################# Do not edit after this
 
-#create the output directory. Exit if it already exists
-out="out/$out_name"
+#create the output directory.
+out="results_out_dir/$out_name"
 mkdir -p $out
 
+#Moving out one level because we set the cwd to be LLaMA-Efficient-Tuning
+out="./../${out}"
 
-CUDA_VISIBLE_DEVICES="$gpu_devices" python ${LLAMA_ET}/src/train_bash.py \
-    --stage sft \
-    --model_name_or_path NousResearch/Nous-Hermes-llama-2-7b \
-    --do_predict \
-    --dataset $dataset_name \
-    --template $exp_file_name \
-    --finetuning_type lora \
-    --output_dir $out \
-    --per_device_eval_batch_size 1 \
-    --max_samples $num_examples \
-    --fp16\
-    --predict_with_generate
+#setting sbatch_out
+mkdir -p "sbatch_out"
+sbatch_out="sbatch_out/${out_name}.out"
+
+sbatch --output=${sbatch_out} sbatch_launch.sh $LLAMA_ET $exp_file_name $dataset_name $num_examples $gpu_devices $out

@@ -24,8 +24,11 @@ def run_sft(
     generating_args: "GeneratingArguments",
     callbacks: Optional[List["TrainerCallback"]] = None
 ):
+    #maps the dataset to column names as defined by dataset_info.json
     dataset = get_dataset(model_args, data_args)
+
     model, tokenizer = load_model_and_tokenizer(model_args, finetuning_args, training_args.do_train, stage="sft")
+
     dataset = preprocess_dataset(dataset, tokenizer, data_args, training_args, stage="sft")
 
     if training_args.predict_with_generate:
