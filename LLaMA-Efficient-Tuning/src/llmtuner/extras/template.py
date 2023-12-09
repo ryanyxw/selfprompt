@@ -290,115 +290,333 @@ register_template(
     sep=[]
 )
 
-
-#"First explain your reasonoing, then give your answer as the last word.
-
-register_template(
-    name="llama2_snli",
-    prefix=[
-        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. Limit your response to one word.  \n\n",
-    ],
-    prompt=[
-        "{{query}}\n\n### Response:\n"
-    ],
-    system="",
-    sep=[
-        "\n"
-    ],
-    use_history=False
-)
-
-##############Baselines
-
-
-register_template(
-    name="exp0",
-    prefix=[
-        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. First provide your answer in one word, then explain how you arrived at your answer.  \n\n",
-    ],
-    prompt=[
-        "{{query}}\n\n### Response:\n"
-    ],
-    system="",
-    sep=[
-        "\n"
-    ],
-    use_history=False
-)
-
-demon_entail_exp1 = "premise: \nThe old lady was captured.\nhypothesis: \nThe old lady murdered her husband.\n\n\n###Response: \nEntailment. This relationship is an entailment because the old lady's murder explains why she's captured."
-demon_contr_exp1 = "premise: \nThe old lady was captured.\nhypothesis: \nThe old lady hanged out with her friends.\n\n\n###Response: \nContradiction. This is a contradiction because the old lady could not get captured and hang out at the same time."
-demon_neutr_exp1 = "premise: \nThe old lady was captured.\nhypothesis: \nThe old lady was smiling at the press.\n\n\n###Response: \nNeutral. This is neutral because being captured and smiling is not contradictory, and smiling does not entails being captured."
+#loops through all python files in llmtuner.experiments and registers them as templates
+import os
+#loop through all files in root/demonstrations and extract all txt files
+demonstrations_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))),"demonstrations")
+for file in os.listdir(demonstrations_dir):
+    if file.endswith(".txt"):
+        #extract the contents of the file
+        with open(os.path.join(demonstrations_dir, file), 'r') as f:
+            contents = f.read()
+            register_template(
+                name=file.strip(".txt"),
+                prefix=[
+                    contents
+                ],
+                prompt=[
+                    "{{query}}"
+                ],
+                system="",
+                sep=[
+                    "\n"
+                ],
+                use_history=False
+            )
 
 
-register_template(
-    name="exp1",
-    prefix=[
-        "### Instruction:\nGiven a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. First provide your answer in one word, then explain how you arrived at your answer.  \n\n" + demon_entail_exp1 + "\n\n" + demon_contr_exp1 + "\n\n" +  demon_neutr_exp1 + "\n\n",
-    ],
-    prompt=[
-        "{{query}}\n\n### Response:\n"
-    ],
-    system="",
-    sep=[
-        "\n"
-    ],
-    use_history=False
-)
 
-
-################Baseline ends
-
-#dummy_rationale
-from llmtuner.experiments import dummy_rationale
-register_template(
-    name="dummy_rationale",
-    prefix=[
-        dummy_rationale.demonstrations
-    ],
-    prompt=[
-        "{{query}}"
-    ],
-    system="",
-    sep=[
-        "\n"
-    ],
-    use_history=False
-)
-
-#random_label
-from llmtuner.experiments import random_label
-register_template(
-    name="random_label",
-    prefix=[
-        random_label.demonstrations
-    ],
-    prompt=[
-        "{{query}}"
-    ],
-    system="",
-    sep=[
-        "\n"
-    ],
-    use_history=False
-)
-
-#random_rationale_and_label
-from llmtuner.experiments import random_rationale_and_label
-register_template(
-    name="random_rationale_and_label",
-    prefix=[
-        random_rationale_and_label.demonstrations
-    ],
-    prompt=[
-        "{{query}}"
-    ],
-    system="",
-    sep=[
-        "\n"
-    ],
-    use_history=False
-)
+# #esnli_1shot
+#
+# from llmtuner.experiments import vanilla_esnli_1shotv1
+# register_template(
+#     name="vanilla_esnli_1shotv1",
+#     prefix=[
+#         vanilla_esnli_1shotv1.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# from llmtuner.experiments import vanilla_esnli_1shotv2
+# register_template(
+#     name="vanilla_esnli_1shotv2",
+#     prefix=[
+#         vanilla_esnli_1shotv2.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# from llmtuner.experiments import vanilla_esnli_1shotv3
+# register_template(
+#     name="vanilla_esnli_1shotv3",
+#     prefix=[
+#         vanilla_esnli_1shotv3.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# #esnli_2shot
+#
+# from llmtuner.experiments import vanilla_esnli_2shotv1
+# register_template(
+#     name="vanilla_esnli_2shotv1",
+#     prefix=[
+#         vanilla_esnli_2shotv1.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# from llmtuner.experiments import vanilla_esnli_2shotv2
+# register_template(
+#     name="vanilla_esnli_2shotv2",
+#     prefix=[
+#         vanilla_esnli_2shotv2.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# from llmtuner.experiments import vanilla_esnli_2shotv3
+# register_template(
+#     name="vanilla_esnli_2shotv3",
+#     prefix=[
+#         vanilla_esnli_2shotv3.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+#
+# #esnli_4shot
+#
+# from llmtuner.experiments import vanilla_esnli_4shotv1
+# register_template(
+#     name="vanilla_esnli_4shotv1",
+#     prefix=[
+#         vanilla_esnli_4shotv1.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+# from llmtuner.experiments import vanilla_esnli_4shotv2
+# register_template(
+#     name="vanilla_esnli_4shotv2",
+#     prefix=[
+#         vanilla_esnli_4shotv2.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+# from llmtuner.experiments import vanilla_esnli_4shotv3
+# register_template(
+#     name="vanilla_esnli_4shotv3",
+#     prefix=[
+#         vanilla_esnli_4shotv3.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# #esnli_8shot
+#
+# from llmtuner.experiments import vanilla_esnli_8shotv1
+# register_template(
+#     name="vanilla_esnli_8shotv1",
+#     prefix=[
+#         vanilla_esnli_8shotv1.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# from llmtuner.experiments import vanilla_esnli_8shotv2
+# register_template(
+#     name="vanilla_esnli_8shotv2",
+#     prefix=[
+#         vanilla_esnli_8shotv2.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# from llmtuner.experiments import vanilla_esnli_8shotv3
+# register_template(
+#     name="vanilla_esnli_8shotv3",
+#     prefix=[
+#         vanilla_esnli_8shotv3.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+#
+# #esnli_16shot
+#
+# from llmtuner.experiments import vanilla_esnli_16shotv1
+# register_template(
+#     name="vanilla_esnli_16shotv1",
+#     prefix=[
+#         vanilla_esnli_16shotv1.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# from llmtuner.experiments import vanilla_esnli_16shotv2
+# register_template(
+#     name="vanilla_esnli_16shotv2",
+#     prefix=[
+#         vanilla_esnli_16shotv2.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# from llmtuner.experiments import vanilla_esnli_16shotv3
+# register_template(
+#     name="vanilla_esnli_16shotv3",
+#     prefix=[
+#         vanilla_esnli_16shotv3.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+#
+# #
+# #vanilla_esnli
+# from llmtuner.experiments import vanilla_esnli
+# register_template(
+#     name="vanilla_esnli",
+#     prefix=[
+#         vanilla_esnli.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# from llmtuner.experiments import vanilla_esnli_test2
+# register_template(
+#     name="vanilla_esnli_test2",
+#     prefix=[
+#         vanilla_esnli_test2.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
+#
+# #extra_language
+# from llmtuner.experiments import extra_language
+# register_template(
+#     name="extra_language",
+#     prefix=[
+#         extra_language.demonstrations
+#     ],
+#     prompt=[
+#         "{{query}}"
+#     ],
+#     system="",
+#     sep=[
+#         "\n"
+#     ],
+#     use_history=False
+# )
 
 ######################
 

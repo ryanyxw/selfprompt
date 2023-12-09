@@ -27,6 +27,7 @@ CUDA_VISIBLE_DEVICES="$gpu_devices" python ${LLAMA_ET}/src/train_bash.py \
     --finetuning_type lora \
     --output_dir $out \
     --per_device_eval_batch_size 1 \
+    --max_new_tokens 257\
     --max_samples $num_examples \
     --fp16\
     --predict_with_generate

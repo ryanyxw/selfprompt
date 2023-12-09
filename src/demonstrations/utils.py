@@ -1,9 +1,3 @@
-
-def get_instruction(args):
-    instruction = "Given a premise and a hypothesis, determine whether the hypothesis and the premise has an entailment, contradiction, or neutral relationship. Give your final answer in one word at the end of your response."
-    return instruction
-
-
 #load the dataset with document-level wikitext
 def setup_dataset(args):
     from datasets import load_dataset
@@ -18,22 +12,6 @@ def setup_dataset(args):
     new_dataset = demonstration_dataset.map(convert_labels, keep_in_memory=True)
     return new_dataset
 
-def template_demonstration_formatting(premise, hypothesis, gold_label):
-    return f"### Input:\nPremise: \n{premise}\nHypothesis: \n{hypothesis}\n\n### Response:\n{gold_label}"
-
-def dummy_demonstration_formatting(premise, hypothesis, gold_label):
-    verb = {
-        "entailment": "entails",
-        "neutral": "is neutral for",
-        "contradiction": "contradicts"
-    }[gold_label]
-    cleaned_premise = premise.strip(". ")
-    cleaned_hypothesis = hypothesis.strip(". ")
-    return f"### Input:\nPremise: \n{premise}\nHypothesis: \n{hypothesis}\n\n### Response:\nBecause the premise \"{cleaned_premise}\" {verb} \"{cleaned_hypothesis}\", the answer is {gold_label}. {gold_label}\n\n"
-
-def esnli_demonstration_formatting(premise, hypothesis, gold_label, rationale):
-    return f"### Input:\nPremise: \n{premise}\nHypothesis: \n{hypothesis}\n\n### Response:\n{rationale} The answer is {gold_label}. {gold_label}\n\n"
-
 
 def get_target_distribution(args):
     min_examples = args.num_demonstrations // 3
@@ -43,3 +21,20 @@ def get_target_distribution(args):
         return [min_examples, min_examples, min_examples + 1]
     else:
         return [min_examples, min_examples + 1, min_examples + 1]
+
+def match_target_distribution(target_distrib, new_dataset):
+    # extract demonstration until we've gotten one shot of each one
+    found_premises = []
+    found_hypotheses = []
+    found_labels = []
+    found_rationales = []
+    for i in range(len(new_dataset)):
+        if (target_distrib[new_dataset[i]["label"]] > 0):
+            target_distrib[new_dataset[i]["label"]] -= 1
+            found_premises.append(new_dataset[i]["premise"])
+            found_hypotheses.append(new_dataset[i]["hypothesis"])
+            found_labels.append(new_dataset[i]["gold_label"])
+            found_rationales.append(new_dataset[i]["explanation_1"])
+        if (target_distrib == [0, 0, 0]):
+            break
+    return found_premises, found_hypotheses, found_labels, found_rationales

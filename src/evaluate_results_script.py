@@ -1,5 +1,5 @@
 import argparse
-from evaluations.utils import evaluate_json, get_json_path
+from evaluations.utils import evaluate_json, get_json_path, get_length_information
 
 import os, sys
 #add the src of LLaMA-Efficient-Tuning to the path
@@ -7,8 +7,13 @@ sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.
 
 def main(args):
     path_to_results = get_json_path(args)
-    num_correct, tot_num = evaluate_json(path_to_results)
-    print(num_correct / tot_num)
+
+    #to extract correct labels
+    # evaluate_json(args, path_to_results)
+
+    #to get the length information
+    print(args.exp_name)
+    print(get_length_information(args, path_to_results))
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -16,8 +21,18 @@ def parse_args():
     parser.add_argument(
         '--exp_name',
         required=True,
-        choices=["dummy_rationale", "random_label", "random_rationale_and_label"],
+        # choices=["dummy_rationale",
+        #          "random_label",
+        #          "random_rationale_and_label",
+        #          "extra_language"],
         help="the name of the experiment"
+    )
+
+    parser.add_argument(
+        '--output_csv',
+        required=True,
+
+        help="the name of the output"
     )
 
     parser.add_argument(
