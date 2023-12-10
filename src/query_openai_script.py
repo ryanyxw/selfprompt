@@ -1,45 +1,38 @@
 import argparse
-from selfinstruct.evaluations.utils import get_json_path, get_length_information
+from selfinstruct.evaluations.openai import query_openai
 
-import os, sys
+import sys, os
 #add the src of LLaMA-Efficient-Tuning to the path
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), os.path.join("LLaMA-Efficient-Tuning", "src")))
 
 def main(args):
-    path_to_results = get_json_path(args)
-
-    #to extract correct labels
-    # evaluate_json(args, path_to_results)
-
-    #to get the length information
-    print(args.exp_name)
-    print(get_length_information(args, path_to_results))
-
+    query_openai(args)
 def parse_args():
     parser = argparse.ArgumentParser()
 
+    #ie. the dataset that we are testing on
     parser.add_argument(
         '--exp_name',
         required=True,
-        # choices=["dummy_rationale",
-        #          "random_label",
-        #          "random_rationale_and_label",
-        #          "extra_language"],
         help="the name of the experiment"
     )
 
     parser.add_argument(
-        '--output_csv',
+        '--num_evaluations',
         required=True,
-
-        help="the name of the output"
+        type=int,
+        help="the number of examples from the test set that we are evaluating on"
     )
 
     parser.add_argument(
-        '--num_score',
+        '--out',
+        help="the path to the file that we are going to be outputting to"
+    )
+
+    parser.add_argument(
+        '--demonstration_file',
         required=True,
-        type=int,
-        help="the number of examples to score"
+        help="the name of file that contains the demonstrations that we are goign to use to query gpt4"
     )
 
     parser.add_argument(

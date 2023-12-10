@@ -1,16 +1,7 @@
 #load the dataset with document-level wikitext
 def setup_dataset(args):
-    from datasets import load_dataset
-    dataset = load_dataset("esnli")
-    demonstration_dataset = dataset["train"].filter(lambda example: example["label"] != -1, keep_in_memory=True).shuffle(seed=args.seed, keep_in_memory=True).select(range(args.demonstration_pool), keep_in_memory=True)
-    convert_dict = {0: "entailment", 1: "neutral", 2: "contradiction"}
-
-    def convert_labels(row):
-        row["gold_label"] = convert_dict[row["label"]]
-        return row
-
-    new_dataset = demonstration_dataset.map(convert_labels, keep_in_memory=True)
-    return new_dataset
+    from selfinstruct.utils import load_dataset
+    return load_dataset("esnli", "train", args.demonstration_pool, args.seed)
 
 
 def get_target_distribution(args):

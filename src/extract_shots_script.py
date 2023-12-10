@@ -1,5 +1,5 @@
 import argparse
-from demonstrations.utils import setup_dataset, get_target_distribution, match_target_distribution
+from selfinstruct.demonstrations.utils import setup_dataset, get_target_distribution, match_target_distribution
 
 import sys, os
 #add the src of LLaMA-Efficient-Tuning to the path
@@ -11,8 +11,8 @@ def main(args):
     final_text = ""
     if (args.exp_name == "vanilla_esnli"):
         #load the correct instruction
-        from demonstrations.instructions import vanilla_instruction
-        from demonstrations.formatting import vanilla_esnli_demonstration_formatting
+        from selfinstruct.demonstrations.instructions import vanilla_instruction
+        from selfinstruct.demonstrations.formatting import vanilla_esnli_demonstration_formatting
         instruction = vanilla_instruction
         final_text = f"### Instruction:\n{instruction}\n\n"
         target_distrib = get_target_distribution(args)
@@ -33,8 +33,8 @@ def main(args):
     #this experiment repeats the instruction for every shot, to remind the model of the instruction each time
     if (args.exp_name == "shots_with_instruction"):
         #load the correct instruction
-        from demonstrations.instructions import vanilla_instruction
-        from demonstrations.formatting import shots_with_instruction_demonstration_formatting
+        from selfinstruct.demonstrations.instructions import vanilla_instruction
+        from selfinstruct.demonstrations.formatting import shots_with_instruction_demonstration_formatting
         instruction = vanilla_instruction
         target_distrib = get_target_distribution(args)
         found_premises, found_hypotheses, found_labels, found_rationales = match_target_distribution(target_distrib,
@@ -58,8 +58,8 @@ def main(args):
     # this experiment asks the model to repeat the instruction, to remind model
     if (args.exp_name == "summarize_instruction"):
         # load the correct instruction
-        from demonstrations.instructions import summarize_instruction
-        from demonstrations.formatting import summarize_instruction_demonstration_formatting
+        from selfinstruct.demonstrations.instructions import summarize_instruction
+        from selfinstruct.demonstrations.formatting import summarize_instruction_demonstration_formatting
         instruction = summarize_instruction
         final_text = f"### Instruction:\n{instruction}\n\n"
         target_distrib = get_target_distribution(args)
@@ -81,8 +81,8 @@ def main(args):
     # this experiment asks the model to repeat the instruction, to remind model
     if (args.exp_name == "shots_with_summarized_instruction"):
         # load the correct instruction
-        from demonstrations.instructions import summarize_instruction
-        from demonstrations.formatting import shots_with_summarized_instruction_demonstration_formatting
+        from selfinstruct.demonstrations.instructions import summarize_instruction
+        from selfinstruct.demonstrations.formatting import shots_with_summarized_instruction_demonstration_formatting
         instruction = summarize_instruction
         target_distrib = get_target_distribution(args)
         found_premises, found_hypotheses, found_labels, found_rationales = match_target_distribution(target_distrib,
@@ -104,8 +104,8 @@ def main(args):
 
     if (args.exp_name == "extra_language"):
         # load the correct instruction
-        from demonstrations.instructions import vanilla_instruction
-        from demonstrations.formatting import extra_language_demonstration_formatting
+        from selfinstruct.demonstrations.instructions import vanilla_instruction
+        from selfinstruct.demonstrations.formatting import extra_language_demonstration_formatting
         instruction = vanilla_instruction
         final_text = f"### Instruction:\n{instruction}\n\n"
         target_distrib = get_target_distribution(args)
@@ -125,8 +125,8 @@ def main(args):
 
     if (args.exp_name == "dummy_rationale"):
         # load the correct instruction
-        from demonstrations.instructions import vanilla_instruction
-        from demonstrations.formatting import dummy_rationale_demonstration_formatting
+        from selfinstruct.demonstrations.instructions import vanilla_instruction
+        from selfinstruct.demonstrations.formatting import dummy_rationale_demonstration_formatting
         instruction = vanilla_instruction
         final_text = f"### Instruction:\n{instruction}\n\n"
         target_distrib = get_target_distribution(args)
@@ -145,8 +145,8 @@ def main(args):
 
     if (args.exp_name == "random_label"):
         # load the correct instruction
-        from demonstrations.instructions import vanilla_instruction
-        from demonstrations.formatting import random_label_demonstration_formatting
+        from selfinstruct.demonstrations.instructions import vanilla_instruction
+        from selfinstruct.demonstrations.formatting import random_label_demonstration_formatting
         instruction = vanilla_instruction
         final_text = f"### Instruction:\n{instruction}\n\n"
         target_distrib = get_target_distribution(args)
@@ -175,8 +175,8 @@ def main(args):
 
     if (args.exp_name == "random_rationale_and_label"):
         # load the correct instruction
-        from demonstrations.instructions import vanilla_instruction
-        from demonstrations.formatting import random_rationale_and_label_demonstration_formatting
+        from selfinstruct.demonstrations.instructions import vanilla_instruction
+        from selfinstruct.demonstrations.formatting import random_rationale_and_label_demonstration_formatting
         instruction = vanilla_instruction
         final_text = f"### Instruction:\n{instruction}\n\n"
         target_distrib = get_target_distribution(args)
@@ -206,8 +206,8 @@ def main(args):
                                                                 found_rationales[(random_array[i] + 1) % len(found_rationales)])
     if (args.exp_name == "label_first"):
         #load the correct instruction
-        from demonstrations.instructions import label_first_instruction
-        from demonstrations.formatting import label_first_demonstration_formatting
+        from selfinstruct.demonstrations.instructions import label_first_instruction
+        from selfinstruct.demonstrations.formatting import label_first_demonstration_formatting
         instruction = label_first_instruction
         final_text = f"### Instruction:\n{instruction}\n\n"
         target_distrib = get_target_distribution(args)

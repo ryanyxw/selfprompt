@@ -1,4 +1,9 @@
 
+#load the dataset with document-level wikitext
+def setup_dataset_evaluation(num_examples, seed=42):
+    from selfinstruct.utils import load_dataset
+    return load_dataset("esnli", "test", num_examples, seed)
+
 #assumes cwd is at bash script level (root)
 def get_json_path(args):
     import os
